@@ -11,6 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit", from: "1.0.0"),
+        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.8.0"),
     ],
     targets: [
         .target(
@@ -18,6 +19,10 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "PgvectorTests",
-            dependencies: ["Pgvector", "PostgresClientKit"]),
+            dependencies: [
+                "Pgvector",
+                "PostgresClientKit",
+                .product(name: "PostgresNIO", package: "postgres-nio")
+            ]),
     ]
 )

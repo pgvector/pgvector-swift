@@ -2,7 +2,7 @@
 
 [pgvector](https://github.com/pgvector/pgvector) examples for Swift
 
-Supports [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit)
+Supports [PostgresNIO](https://github.com/vapor/postgres-nio) and [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit)
 
 [![Build Status](https://github.com/pgvector/pgvector-swift/workflows/build/badge.svg?branch=master)](https://github.com/pgvector/pgvector-swift/actions)
 
@@ -10,7 +10,37 @@ Supports [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit
 
 Follow the instructions for your database library:
 
+- [PostgresNIO](#postgresnio)
 - [PostgresClientKit](#postgresclientkit)
+
+## PostgresNIO
+
+Create a table
+
+```swift
+try await connection.query("CREATE TABLE items (id bigserial primary key, embedding vector(3))", logger: logger)
+```
+
+Insert vectors
+
+```swift
+let embedding1 = "[1,1,1]"
+let embedding2 = "[2,2,2]"
+let embedding3 = "[1,1,2]"
+try await connection.query("INSERT INTO items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)", logger: logger)
+```
+
+Get the nearest neighbors
+
+```swift
+let embedding = "[1,1,1]"
+let rows =  try await connection.query("SELECT id, embedding::text FROM items ORDER BY embedding <-> \(embedding)::vector LIMIT 5", logger: logger)
+for try await row in rows {
+    print(row)
+}
+```
+
+See a [full example](Tests/PgvectorTests/PgvectorTests.swift)
 
 ## PostgresClientKit
 
