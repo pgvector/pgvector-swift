@@ -18,7 +18,7 @@ Follow the instructions for your database library:
 Create a table
 
 ```swift
-try await connection.query("CREATE TABLE items (id bigserial primary key, embedding vector(3))", logger: logger)
+try await connection.query("CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))", logger: logger)
 ```
 
 Insert vectors
@@ -47,7 +47,7 @@ See a [full example](Tests/PgvectorTests/PgvectorTests.swift)
 Create a table
 
 ```swift
-let text = "CREATE TABLE items (id bigserial primary key, embedding vector(3))"
+let text = "CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))"
 let statement = try connection.prepareStatement(text: text)
 try statement.execute()
 ```

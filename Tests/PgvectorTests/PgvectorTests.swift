@@ -24,7 +24,7 @@ final class PgvectorTests: XCTestCase {
         statement = try connection.prepareStatement(text: text)
         try statement.execute()
 
-        text = "CREATE TABLE items (id bigserial primary key, embedding vector(3))"
+        text = "CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))"
         statement = try connection.prepareStatement(text: text)
         try statement.execute()
 
@@ -74,7 +74,7 @@ final class PgvectorTests: XCTestCase {
 
         try await connection.query("CREATE EXTENSION IF NOT EXISTS vector", logger: logger)
         try await connection.query("DROP TABLE IF EXISTS items", logger: logger)
-        try await connection.query("CREATE TABLE items (id bigserial primary key, embedding vector(3))", logger: logger)
+        try await connection.query("CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))", logger: logger)
 
         let embedding1 = "[1,1,1]"
         let embedding2 = "[2,2,2]"
