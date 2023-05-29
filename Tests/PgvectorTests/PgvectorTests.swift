@@ -82,7 +82,7 @@ final class PgvectorTests: XCTestCase {
         try await connection.query("INSERT INTO items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)", logger: logger)
 
         let embedding = "[1,1,1]"
-        let rows =  try await connection.query("SELECT id, embedding::text FROM items ORDER BY embedding <-> \(embedding)::vector LIMIT 5", logger: logger)
+        let rows = try await connection.query("SELECT id, embedding::text FROM items ORDER BY embedding <-> \(embedding)::vector LIMIT 5", logger: logger)
         for try await row in rows {
             print(row)
         }
