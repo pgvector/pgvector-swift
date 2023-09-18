@@ -15,6 +15,12 @@ Follow the instructions for your database library:
 
 ## PostgresNIO
 
+Enable the extension
+
+```swift
+try await connection.query("CREATE EXTENSION IF NOT EXISTS vector", logger: logger)
+```
+
 Create a table
 
 ```swift
@@ -43,6 +49,14 @@ for try await row in rows {
 See a [full example](Tests/PgvectorTests/PgvectorTests.swift)
 
 ## PostgresClientKit
+
+Enable the extension
+
+```swift
+let text = "CREATE EXTENSION IF NOT EXISTS vector"
+let statement = try connection.prepareStatement(text: text)
+try statement.execute()
+```
 
 Create a table
 
