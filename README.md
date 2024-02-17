@@ -4,7 +4,7 @@
 
 Supports [PostgresNIO](https://github.com/vapor/postgres-nio) and [PostgresClientKit](https://github.com/codewinsdotcom/PostgresClientKit)
 
-[![Build Status](https://github.com/pgvector/pgvector-swift/workflows/build/badge.svg?branch=master)](https://github.com/pgvector/pgvector-swift/actions)
+[![Build Status](https://github.com/pgvector/pgvector-swift/actions/workflows/build.yml/badge.svg)](https://github.com/pgvector/pgvector-swift/actions)
 
 ## Getting Started
 
