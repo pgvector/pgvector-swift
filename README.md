@@ -49,9 +49,9 @@ for try await row in rows {
 Add an approximate index
 
 ```swift
-try await connection.query("CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)", logger: logger)
-// or
 try await connection.query("CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)", logger: logger)
+// or
+try await connection.query("CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)", logger: logger)
 ```
 
 Use `vector_ip_ops` for inner product and `vector_cosine_ops` for cosine distance
@@ -102,9 +102,9 @@ for row in cursor {
 Add an approximate index
 
 ```swift
-let text = "CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)"
-// or
 let text = "CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)"
+// or
+let text = "CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)"
 let statement = try connection.prepareStatement(text: text)
 try statement.execute()
 ```
