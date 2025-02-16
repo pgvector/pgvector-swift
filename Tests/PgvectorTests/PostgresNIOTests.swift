@@ -5,7 +5,7 @@ import Testing
 
 final class PostgresNIOTests {
     @Test func example() async throws {
-        let config = PostgresConnection.Configuration(
+        let config = PostgresClient.Configuration(
             host: "localhost",
             port: 5432,
             username: ProcessInfo.processInfo.environment["USER"]!,
@@ -13,31 +13,32 @@ final class PostgresNIOTests {
             database: "pgvector_swift_test",
             tls: .disable
         )
-        let logger = Logger(label: "postgres-logger")
 
-        let connection = try await PostgresConnection.connect(
-            configuration: config,
-            id: 1,
-            logger: logger
-        )
+        let client = PostgresClient(configuration: config)
 
-        try await connection.query("CREATE EXTENSION IF NOT EXISTS vector", logger: logger)
-        try await connection.query("DROP TABLE IF EXISTS nio_items", logger: logger)
-        try await connection.query("CREATE TABLE nio_items (id bigserial PRIMARY KEY, embedding vector(3))", logger: logger)
+        try await withThrowingTaskGroup(of: Void.self) { taskGroup in
+            taskGroup.addTask {
+                await client.run()
+            }
 
-        let embedding1 = "[1,1,1]"
-        let embedding2 = "[2,2,2]"
-        let embedding3 = "[1,1,2]"
-        try await connection.query("INSERT INTO nio_items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)", logger: logger)
+            try await client.query("CREATE EXTENSION IF NOT EXISTS vector")
+            try await client.query("DROP TABLE IF EXISTS nio_items")
+            try await client.query("CREATE TABLE nio_items (id bigserial PRIMARY KEY, embedding vector(3))")
 
-        let embedding = "[1,1,1]"
-        let rows = try await connection.query("SELECT id, embedding::text FROM nio_items ORDER BY embedding <-> \(embedding)::vector LIMIT 5", logger: logger)
-        for try await row in rows {
-            print(row)
+            let embedding1 = "[1,1,1]"
+            let embedding2 = "[2,2,2]"
+            let embedding3 = "[1,1,2]"
+            try await client.query("INSERT INTO nio_items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)")
+
+            let embedding = "[1,1,1]"
+            let rows = try await client.query("SELECT id, embedding::text FROM nio_items ORDER BY embedding <-> \(embedding)::vector LIMIT 5")
+            for try await row in rows {
+                print(row)
+            }
+
+            try await client.query("CREATE INDEX ON nio_items USING ivfflat (embedding vector_l2_ops) WITH (lists = 1)")
+
+            taskGroup.cancelAll()
         }
-
-        try await connection.query("CREATE INDEX ON nio_items USING ivfflat (embedding vector_l2_ops) WITH (lists = 1)", logger: logger)
-
-        try await connection.close()
     }
 }

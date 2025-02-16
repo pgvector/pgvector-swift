@@ -18,13 +18,13 @@ Follow the instructions for your database library:
 Enable the extension
 
 ```swift
-try await connection.query("CREATE EXTENSION IF NOT EXISTS vector", logger: logger)
+try await client.query("CREATE EXTENSION IF NOT EXISTS vector")
 ```
 
 Create a table
 
 ```swift
-try await connection.query("CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))", logger: logger)
+try await client.query("CREATE TABLE items (id bigserial PRIMARY KEY, embedding vector(3))")
 ```
 
 Insert vectors
@@ -33,14 +33,14 @@ Insert vectors
 let embedding1 = "[1,1,1]"
 let embedding2 = "[2,2,2]"
 let embedding3 = "[1,1,2]"
-try await connection.query("INSERT INTO items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)", logger: logger)
+try await client.query("INSERT INTO items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)")
 ```
 
 Get the nearest neighbors
 
 ```swift
 let embedding = "[1,1,1]"
-let rows = try await connection.query("SELECT id, embedding::text FROM items ORDER BY embedding <-> \(embedding)::vector LIMIT 5", logger: logger)
+let rows = try await client.query("SELECT id, embedding::text FROM items ORDER BY embedding <-> \(embedding)::vector LIMIT 5")
 for try await row in rows {
     print(row)
 }
@@ -49,9 +49,9 @@ for try await row in rows {
 Add an approximate index
 
 ```swift
-try await connection.query("CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)", logger: logger)
+try await client.query("CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)")
 // or
-try await connection.query("CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)", logger: logger)
+try await client.query("CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 100)")
 ```
 
 Use `vector_ip_ops` for inner product and `vector_cosine_ops` for cosine distance
