@@ -35,7 +35,7 @@ final class PostgresNIOTests {
                 print(row)
             }
 
-            try await client.query("CREATE INDEX ON nio_items USING ivfflat (embedding vector_l2_ops) WITH (lists = 1)")
+            try await client.query("CREATE INDEX ON nio_items USING hnsw (embedding vector_l2_ops)")
 
             taskGroup.cancelAll()
         }

@@ -39,7 +39,7 @@ final class PostgresClientKitTests {
             print(id, embedding)
         }
 
-        text = "CREATE INDEX ON items USING ivfflat (embedding vector_l2_ops) WITH (lists = 1)"
+        text = "CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)"
         statement = try connection.prepareStatement(text: text)
         try statement.execute()
     }
