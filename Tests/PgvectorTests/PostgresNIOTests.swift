@@ -1,6 +1,7 @@
 import Foundation
 import PostgresNIO
 import Testing
+@testable import Pgvector
 
 final class PostgresNIOTests {
     @Test func example() async throws {
