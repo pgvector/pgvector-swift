@@ -1,7 +1,6 @@
-import Testing
 import Foundation
 import PostgresClientKit
-@testable import Pgvector
+import Testing
 
 final class PostgresClientKitTests {
     @Test func example() throws {

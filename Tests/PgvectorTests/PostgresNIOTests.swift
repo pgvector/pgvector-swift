@@ -1,8 +1,7 @@
-import Testing
 import Foundation
-import PostgresNIO
-import NIOPosix
 import Logging
+import PostgresNIO
+import Testing
 
 final class PostgresNIOTests {
     @Test func example() async throws {
