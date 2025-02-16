@@ -13,6 +13,10 @@ Follow the instructions for your database library:
 - [PostgresNIO](#postgresnio)
 - [PostgresClientKit](#postgresclientkit)
 
+Or check out an example:
+
+- [Embeddings](Examples/Ollama/Sources/main.swift) with Ollama
+
 ## PostgresNIO
 
 Enable the extension
@@ -129,4 +133,12 @@ git clone https://github.com/pgvector/pgvector-swift.git
 cd pgvector-swift
 createdb pgvector_swift_test
 swift test
+```
+
+To run an example:
+
+```sh
+cd Examples/Ollama
+createdb pgvector_example
+swift run
 ```
