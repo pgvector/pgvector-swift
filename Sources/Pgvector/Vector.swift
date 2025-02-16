@@ -1,7 +1,7 @@
 public struct Vector: Equatable {
     public var value: [Float]
 
-    init(_ value: [Float]) {
+    public init(_ value: [Float]) {
         self.value = value
     }
 

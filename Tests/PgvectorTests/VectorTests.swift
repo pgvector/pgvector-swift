@@ -1,5 +1,5 @@
+import Pgvector
 import Testing
-@testable import Pgvector
 
 final class VectorTests {
     @Test func equatable() {
