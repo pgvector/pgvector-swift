@@ -1,6 +1,5 @@
-#if canImport(PostgresClientKit)
+// TODO make conditional
 import PostgresClientKit
-#endif
 
 struct HalfVector: Equatable {
     var value: [Float16]
@@ -14,10 +13,9 @@ struct HalfVector: Equatable {
     }
 }
 
-#if canImport(PostgresClientKit)
+// TODO make conditional
 extension HalfVector: PostgresValueConvertible {
     public var postgresValue: PostgresValue {
         return PostgresValue(String(describing: value))
     }
 }
-#endif
