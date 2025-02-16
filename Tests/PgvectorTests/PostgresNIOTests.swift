@@ -6,8 +6,6 @@ import Logging
 
 final class PostgresNIOTests {
     @Test func example() async throws {
-        let logger = Logger(label: "postgres-logger")
-
         let config = PostgresConnection.Configuration(
             host: "localhost",
             port: 5432,
@@ -16,6 +14,7 @@ final class PostgresNIOTests {
             database: "pgvector_swift_test",
             tls: .disable
         )
+        let logger = Logger(label: "postgres-logger")
 
         let connection = try await PostgresConnection.connect(
             configuration: config,
