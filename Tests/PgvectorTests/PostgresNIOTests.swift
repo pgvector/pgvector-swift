@@ -1,5 +1,4 @@
 import Foundation
-import Logging
 import PostgresNIO
 import Testing
 
