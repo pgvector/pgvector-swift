@@ -56,7 +56,7 @@ try await connection.query("CREATE INDEX ON items USING ivfflat (embedding vecto
 
 Use `vector_ip_ops` for inner product and `vector_cosine_ops` for cosine distance
 
-See a [full example](Tests/PgvectorTests/PgvectorTests.swift)
+See a [full example](Tests/PgvectorTests/PostgresNIOTests.swift)
 
 ## PostgresClientKit
 
@@ -111,7 +111,7 @@ try statement.execute()
 
 Use `vector_ip_ops` for inner product and `vector_cosine_ops` for cosine distance
 
-See a [full example](Tests/PgvectorTests/PgvectorTests.swift)
+See a [full example](Tests/PgvectorTests/PostgresClientKitTests.swift)
 
 ## Contributing
 
