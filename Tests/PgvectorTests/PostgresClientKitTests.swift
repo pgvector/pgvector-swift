@@ -26,11 +26,11 @@ final class PostgresClientKitTests {
 
         text = "INSERT INTO items (embedding) VALUES ($1), ($2), ($3)"
         statement = try connection.prepareStatement(text: text)
-        try statement.execute(parameterValues: [ "[1,1,1]", "[2,2,2]", "[1,1,2]" ])
+        try statement.execute(parameterValues: ["[1,1,1]", "[2,2,2]", "[1,1,2]"])
 
         text = "SELECT * FROM items ORDER BY embedding <-> $1 LIMIT 5"
         statement = try connection.prepareStatement(text: text)
-        let cursor = try statement.execute(parameterValues: [ "[1,1,1]" ])
+        let cursor = try statement.execute(parameterValues: ["[1,1,1]"])
 
         for row in cursor {
             let columns = try row.get().columns
