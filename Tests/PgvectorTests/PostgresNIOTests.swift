@@ -6,7 +6,6 @@ import Logging
 
 final class PostgresNIOTests {
     @Test func example() async throws {
-        let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
         let logger = Logger(label: "postgres-logger")
 
         let config = PostgresConnection.Configuration(
@@ -19,7 +18,6 @@ final class PostgresNIOTests {
         )
 
         let connection = try await PostgresConnection.connect(
-            on: eventLoopGroup.next(),
             configuration: config,
             id: 1,
             logger: logger
