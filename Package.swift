@@ -11,6 +11,9 @@ let package = Package(
         .library(
             name: "Pgvector",
             targets: ["Pgvector"]),
+        .library(
+            name: "PgvectorClientKit",
+            targets: ["PgvectorClientKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit", from: "1.5.0"),
@@ -20,10 +23,14 @@ let package = Package(
         .target(
             name: "Pgvector",
             dependencies: []),
+        .target(
+            name: "PgvectorClientKit",
+            dependencies: ["Pgvector", "PostgresClientKit"]),
         .testTarget(
             name: "PgvectorTests",
             dependencies: [
                 "Pgvector",
+                "PgvectorClientKit",
                 "PostgresClientKit",
                 .product(name: "PostgresNIO", package: "postgres-nio")
             ]),
