@@ -19,6 +19,10 @@ public struct HalfVector: Equatable {
         self.value = value
     }
 
+    public func text() -> String {
+        return "[" + value.map { String($0) }.joined(separator: ",") + "]"
+    }
+
     public static func == (lhs: HalfVector, rhs: HalfVector) -> Bool {
         return lhs.value == rhs.value
     }

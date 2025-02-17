@@ -3,7 +3,7 @@ import PostgresClientKit
 
 extension HalfVector: @retroactive PostgresValueConvertible {
     public var postgresValue: PostgresValue {
-        return PostgresValue(String(describing: value))
+        return PostgresValue(text())
     }
 }
 

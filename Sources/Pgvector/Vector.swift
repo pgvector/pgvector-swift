@@ -19,6 +19,10 @@ public struct Vector: Equatable {
         self.value = value
     }
 
+    public func text() -> String {
+        return "[" + value.map { String($0) }.joined(separator: ",") + "]"
+    }
+
     public static func == (lhs: Vector, rhs: Vector) -> Bool {
         return lhs.value == rhs.value
     }

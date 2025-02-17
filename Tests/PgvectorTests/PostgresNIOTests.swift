@@ -26,12 +26,12 @@ final class PostgresNIOTests {
             try await client.query("DROP TABLE IF EXISTS nio_items")
             try await client.query("CREATE TABLE nio_items (id bigserial PRIMARY KEY, embedding vector(3))")
 
-            let embedding1 = "[1,1,1]"
-            let embedding2 = "[2,2,2]"
-            let embedding3 = "[1,1,2]"
+            let embedding1 = Vector([1, 1, 1]).text()
+            let embedding2 = Vector([2, 2, 2]).text()
+            let embedding3 = Vector([1, 1, 2]).text()
             try await client.query("INSERT INTO nio_items (embedding) VALUES (\(embedding1)::vector), (\(embedding2)::vector), (\(embedding3)::vector)")
 
-            let embedding = "[1,1,1]"
+            let embedding = Vector([1, 1, 1]).text()
             let rows = try await client.query("SELECT id, embedding::text FROM nio_items ORDER BY embedding <-> \(embedding)::vector LIMIT 5")
             for try await (id, embedding) in rows.decode((Int, String).self) {
                 print(id, Vector(embedding)!)
