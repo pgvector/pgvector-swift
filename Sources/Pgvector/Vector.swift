@@ -1,5 +1,5 @@
 public struct Vector: Equatable {
-    public var value: [Float]
+    public private(set) var value: [Float]
 
     public init(_ value: [Float]) {
         self.value = value

@@ -1,7 +1,7 @@
 public struct SparseVector: Equatable {
-    var dim: Int
-    var indices: [Int]
-    var values: [Float]
+    public private(set) var dim: Int
+    public private(set) var indices: [Int]
+    public private(set) var values: [Float]
 
     public init(_ value: [Float]) {
         var indices: [Int] = []

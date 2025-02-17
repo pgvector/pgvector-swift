@@ -1,5 +1,5 @@
 public struct HalfVector: Equatable {
-    public var value: [Float16]
+    public private(set) var value: [Float16]
 
     public init(_ value: [Float16]) {
         self.value = value
