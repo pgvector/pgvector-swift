@@ -32,9 +32,9 @@ final class PostgresNIOTests {
             try await client.query("INSERT INTO nio_items (embedding) VALUES (\(embedding1)), (\(embedding2)), (\(embedding3))")
 
             let embedding = Vector([1, 1, 1])
-            let rows = try await client.query("SELECT id, embedding::text FROM nio_items ORDER BY embedding <-> \(embedding) LIMIT 5")
-            for try await (id, embedding) in rows.decode((Int, String).self) {
-                print(id, Vector(embedding)!)
+            let rows = try await client.query("SELECT id, embedding FROM nio_items ORDER BY embedding <-> \(embedding) LIMIT 5")
+            for try await (id, embedding) in rows.decode((Int, Vector).self) {
+                print(id, embedding)
             }
 
             try await client.query("CREATE INDEX ON nio_items USING hnsw (embedding vector_l2_ops)")

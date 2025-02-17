@@ -21,3 +21,33 @@ extension Vector: @retroactive PostgresDynamicTypeEncodable {
         }
     }
 }
+
+extension Vector: @retroactive PostgresDecodable {
+    public init<JSONDecoder: PostgresJSONDecoder>(
+        from buffer: inout ByteBuffer,
+        type: PostgresDataType,
+        format: PostgresFormat,
+        context: PostgresDecodingContext<JSONDecoder>
+    ) throws {
+        guard format == .binary else {
+            throw PostgresDecodingError.Code.failure;
+        }
+
+        guard buffer.readableBytes >= 2, let dim = buffer.readInteger(as: Int16.self) else {
+            throw PostgresDecodingError.Code.failure
+        }
+
+        guard buffer.readableBytes >= 2, let unused = buffer.readInteger(as: Int16.self), unused == 0 else {
+            throw PostgresDecodingError.Code.failure
+        }
+
+        var value: [Float] = []
+        for _ in 0..<dim {
+            guard buffer.readableBytes >= 4, let v = buffer.readInteger(as: UInt32.self) else {
+                throw PostgresDecodingError.Code.failure
+            }
+            value.append(Float(bitPattern: v))
+        }
+        self.init(value)
+    }
+}
