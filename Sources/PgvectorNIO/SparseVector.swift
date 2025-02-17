@@ -35,7 +35,7 @@ extension SparseVector: @retroactive PostgresDecodable {
         format: PostgresFormat,
         context: PostgresDecodingContext<JSONDecoder>
     ) throws {
-        guard type == SparseVector.psqlType, type.isUserDefined else {
+        guard type == SparseVector.psqlType else {
             throw PostgresDecodingError.Code.typeMismatch
         }
 
