@@ -20,13 +20,12 @@ public struct SparseVector: Equatable {
 
     public init?(_ string: String) {
         let parts = string.split(separator: "/", maxSplits: 3)
-        if parts.count != 2 || parts[0].first != "{" || parts[0].last != "}" {
+        guard parts.count == 2, parts[0].first == "{", parts[0].last == "}" else {
             return nil
         }
 
         let elements = parts[0]
-        let dim = Int(parts[1])
-        if dim == nil {
+        guard let dim = Int(parts[1]) else {
             return nil
         }
         var indices: [Int] = []
@@ -37,10 +36,7 @@ public struct SparseVector: Equatable {
             let end = elements.index(elements.endIndex, offsetBy: -1)
             for e in elements[start..<end].split(separator: ",") {
                 let ep = e.split(separator: ":", maxSplits: 3)
-                if ep.count != 2 {
-                    return nil
-                }
-                if let i = Int(ep[0]), let v = Float(ep[1]) {
+                if ep.count == 2, let i = Int(ep[0]), let v = Float(ep[1]) {
                     indices.append(i - 1)
                     values.append(v)
                 } else {
@@ -49,7 +45,7 @@ public struct SparseVector: Equatable {
             }
         }
 
-        self.dim = dim!
+        self.dim = dim
         self.indices = indices
         self.values = values
     }
