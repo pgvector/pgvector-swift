@@ -71,6 +71,6 @@ extension SparseVector: @retroactive PostgresDecodable {
             values.append(Float(bitPattern: v))
         }
 
-        self.init(dim: Int(dim), indices: indices, values: values)!
+        self.init(Dictionary(uniqueKeysWithValues: zip(indices, values)), dim: Int(dim))!
     }
 }

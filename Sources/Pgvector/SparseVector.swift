@@ -35,17 +35,6 @@ public struct SparseVector: Equatable {
         self.values = elements.map { $0.1 }
     }
 
-    // TODO check indices sorted and non-negative
-    public init?(dim: Int, indices: [Int], values: [Float]) {
-        guard indices.count == values.count else {
-            return nil
-        }
-
-        self.dim = dim
-        self.indices = indices
-        self.values = values
-    }
-
     public init?(_ string: String) {
         let parts = string.split(separator: "/", maxSplits: 2)
         guard parts.count == 2 else {
