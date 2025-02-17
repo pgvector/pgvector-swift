@@ -18,6 +18,23 @@ public struct SparseVector: Equatable {
         self.values = values
     }
 
+    public init?(_ dictionary: [Int: Float], dim: Int) {
+        guard dim >= 0 else {
+            return nil
+        }
+
+        guard dictionary.allSatisfy({ $0.0 >= 0 && $0.0 < dim }) else {
+            return nil
+        }
+
+        var elements = dictionary.filter { $1 != 0 }.map { ($0, $1) }
+        elements.sort { $0.0 < $1.0 }
+
+        self.dim = dim
+        self.indices = elements.map { $0.0 }
+        self.values = elements.map { $0.1 }
+    }
+
     // TODO check indices sorted and non-negative
     public init?(dim: Int, indices: [Int], values: [Float]) {
         guard indices.count == values.count else {
