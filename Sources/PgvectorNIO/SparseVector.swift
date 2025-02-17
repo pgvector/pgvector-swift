@@ -33,6 +33,10 @@ extension SparseVector: @retroactive PostgresDecodable {
         format: PostgresFormat,
         context: PostgresDecodingContext<JSONDecoder>
     ) throws {
+        guard type.isUserDefined else {
+            throw PostgresDecodingError.Code.typeMismatch
+        }
+
         guard format == .binary else {
             throw PostgresDecodingError.Code.failure;
         }
