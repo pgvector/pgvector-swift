@@ -44,5 +44,16 @@ final class PostgresClientKitTests {
         text = "CREATE INDEX ON items USING hnsw (embedding vector_l2_ops)"
         statement = try connection.prepareStatement(text: text)
         try statement.execute()
+
+        text = "SELECT $1::halfvec, $2::sparsevec"
+        statement = try connection.prepareStatement(text: text)
+        let typesCursor = try statement.execute(parameterValues: [HalfVector([1, 2, 3]), SparseVector([1, 0, 2, 0, 3, 0])])
+
+        for row in typesCursor {
+            let columns = try row.get().columns
+            let halfEmbedding = try columns[0].halfVector()
+            let sparseEmbedding = try columns[1].sparseVector()
+            print(halfEmbedding, sparseEmbedding)
+        }
     }
 }
