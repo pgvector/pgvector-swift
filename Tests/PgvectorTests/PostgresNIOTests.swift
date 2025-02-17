@@ -1,4 +1,6 @@
 import Foundation
+import Pgvector
+import PgvectorNIO
 import PostgresNIO
 import Testing
 
