@@ -33,8 +33,8 @@ final class PostgresNIOTests {
 
             let embedding = "[1,1,1]"
             let rows = try await client.query("SELECT id, embedding::text FROM nio_items ORDER BY embedding <-> \(embedding)::vector LIMIT 5")
-            for try await row in rows {
-                print(row)
+            for try await (id, embedding) in rows.decode((Int, String).self) {
+                print(id, Vector(embedding)!)
             }
 
             try await client.query("CREATE INDEX ON nio_items USING hnsw (embedding vector_l2_ops)")
