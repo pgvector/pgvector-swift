@@ -25,7 +25,11 @@ public struct SparseVector: Equatable {
         }
 
         let elements = parts[0]
-        guard let dim = Int(parts[1]), elements.first == "{", elements.last == "}" else {
+        guard elements.first == "{", elements.last == "}" else {
+            return nil
+        }
+
+        guard let dim = Int(parts[1]) else {
             return nil
         }
 
