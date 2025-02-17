@@ -13,7 +13,11 @@ let config = PostgresClient.Configuration(
 
 let client = PostgresClient(configuration: config)
 
-func embed(input: String) async throws -> [Double] {
+func embed(input: String, taskType: String) async throws -> [Double] {
+    // nomic-embed-text uses a task prefix
+    // https://huggingface.co/nomic-ai/nomic-embed-text-v1.5
+    let input = taskType + ": " + input
+
     let response = try await Client.default.embed(
         model: "nomic-embed-text",
         input: input
@@ -37,12 +41,12 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
     ]
 
     for content in input {
-        let embedding = try await embed(input: content)
+        let embedding = try await embed(input: content, taskType: "search_document")
         try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding))")
     }
 
     let query = "forest"
-    let embedding = try await embed(input: query)
+    let embedding = try await embed(input: query, taskType: "search_query")
     let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <=> \(embedding)::vector LIMIT 5")
     for try await row in rows {
         print(row)
