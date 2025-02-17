@@ -37,7 +37,7 @@ final class PostgresClientKitTests {
         for row in cursor {
             let columns = try row.get().columns
             let id = try columns[0].int()
-            let embedding = try columns[1].string()
+            let embedding = try columns[1].vector()
             print(id, embedding)
         }
 
