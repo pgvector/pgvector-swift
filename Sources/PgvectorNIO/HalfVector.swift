@@ -1,7 +1,7 @@
 import Pgvector
 import PostgresNIO
 
-extension Vector: @retroactive PostgresEncodable {
+extension HalfVector: @retroactive PostgresEncodable {
     public static var psqlType: PostgresDataType = PostgresDataType(1)
 
     public static var psqlFormat: PostgresFormat {
@@ -15,12 +15,12 @@ extension Vector: @retroactive PostgresEncodable {
         byteBuffer.writeInteger(Int16(value.count), as: Int16.self)
         byteBuffer.writeInteger(0, as: Int16.self)
         for v in value {
-            byteBuffer.writeInteger(v.bitPattern)
+            byteBuffer.writeInteger(v.bitPattern, as: UInt16.self)
         }
     }
 }
 
-extension Vector: @retroactive PostgresDecodable {
+extension HalfVector: @retroactive PostgresDecodable {
     public init<JSONDecoder: PostgresJSONDecoder>(
         from buffer: inout ByteBuffer,
         type: PostgresDataType,
@@ -43,12 +43,12 @@ extension Vector: @retroactive PostgresDecodable {
             throw PostgresDecodingError.Code.failure
         }
 
-        var value: [Float] = []
+        var value: [Float16] = []
         for _ in 0..<dim {
-            guard buffer.readableBytes >= 4, let v = buffer.readInteger(as: UInt32.self) else {
+            guard buffer.readableBytes >= 2, let v = buffer.readInteger(as: UInt16.self) else {
                 throw PostgresDecodingError.Code.failure
             }
-            value.append(Float(bitPattern: v))
+            value.append(Float16(bitPattern: v))
         }
         self.init(value)
     }
