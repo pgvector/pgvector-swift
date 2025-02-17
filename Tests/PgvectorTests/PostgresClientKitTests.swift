@@ -45,15 +45,16 @@ final class PostgresClientKitTests {
         statement = try connection.prepareStatement(text: text)
         try statement.execute()
 
-        text = "SELECT $1::halfvec, $2::sparsevec"
+        text = "SELECT $1::vector, $2::halfvec, $3::sparsevec"
         statement = try connection.prepareStatement(text: text)
-        let typesCursor = try statement.execute(parameterValues: [HalfVector([1, 2, 3]), SparseVector([1, 0, 2, 0, 3, 0])])
+        let typesCursor = try statement.execute(parameterValues: [Vector([1, 2, 3]), HalfVector([1, 2, 3]), SparseVector([1, 0, 2, 0, 3, 0])])
 
         for row in typesCursor {
             let columns = try row.get().columns
-            let halfEmbedding = try columns[0].halfVector()
-            let sparseEmbedding = try columns[1].sparseVector()
-            print(halfEmbedding, sparseEmbedding)
+            let embedding = try columns[0].vector()
+            let halfEmbedding = try columns[1].halfVector()
+            let sparseEmbedding = try columns[2].sparseVector()
+            print(embedding, halfEmbedding, sparseEmbedding)
         }
     }
 }
