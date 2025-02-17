@@ -18,6 +18,16 @@ public struct SparseVector: Equatable {
         self.values = values
     }
 
+    public init?(dim: Int, indices: [Int], values: [Float]) {
+        guard indices.count == values.count else {
+            return nil
+        }
+
+        self.dim = dim
+        self.indices = indices
+        self.values = values
+    }
+
     public init?(_ string: String) {
         let parts = string.split(separator: "/", maxSplits: 3)
         if parts.count != 2 || parts[0].first != "{" || parts[0].last != "}" {

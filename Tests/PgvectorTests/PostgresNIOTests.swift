@@ -39,6 +39,13 @@ final class PostgresNIOTests {
 
             try await client.query("CREATE INDEX ON nio_items USING hnsw (embedding vector_l2_ops)")
 
+            let halfEmbedding = HalfVector([1, 2, 3])
+            let sparseEmbedding = SparseVector([1, 0, 2, 0, 3, 0])
+            let typeRows = try await client.query("SELECT \(embedding), \(halfEmbedding), \(sparseEmbedding)")
+            for try await (v, h, s) in typeRows.decode((Vector, HalfVector, SparseVector).self) {
+                print(v, h, s)
+            }
+
             taskGroup.cancelAll()
         }
     }
