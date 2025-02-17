@@ -1,10 +1,14 @@
 import Pgvector
 import PostgresNIO
 
-extension HalfVector: @retroactive PostgresEncodable {
-    public static var psqlType: PostgresDataType = PostgresDataType(1)
+extension HalfVector: @retroactive PostgresDynamicTypeEncodable {
+    public static var psqlType: PostgresDataType?
 
-    public static var psqlFormat: PostgresFormat {
+    public var psqlType: PostgresDataType {
+        HalfVector.psqlType!
+    }
+
+    public var psqlFormat: PostgresFormat {
         .binary
     }
 

@@ -1,10 +1,14 @@
 import Pgvector
 import PostgresNIO
 
-extension SparseVector: @retroactive PostgresEncodable {
-    public static var psqlType: PostgresDataType = PostgresDataType(1)
+extension SparseVector: @retroactive PostgresDynamicTypeEncodable {
+    public static var psqlType: PostgresDataType?
 
-    public static var psqlFormat: PostgresFormat {
+    public var psqlType: PostgresDataType {
+        SparseVector.psqlType!
+    }
+
+    public var psqlFormat: PostgresFormat {
         .binary
     }
 
