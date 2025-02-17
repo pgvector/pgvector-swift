@@ -6,14 +6,14 @@ public struct Vector: Equatable {
     }
 
     public init?(_ string: String) {
-        if (string.count < 2) {
+        guard string.count >= 2, string.first == "[", string.last == "]" else {
             return nil
         }
         let start = string.index(string.startIndex, offsetBy: 1)
         let end = string.index(string.endIndex, offsetBy: -1)
         let parts = string[start..<end].split(separator: ",")
         let value = parts.compactMap { Float($0) }
-        if parts.count != value.count {
+        guard parts.count == value.count else {
             return nil
         }
         self.value = value
