@@ -27,7 +27,7 @@ extension HalfVector: @retroactive PostgresDecodable {
         format: PostgresFormat,
         context: PostgresDecodingContext<JSONDecoder>
     ) throws {
-        guard type.isUserDefined else {
+        guard type == HalfVector.psqlType, type.isUserDefined else {
             throw PostgresDecodingError.Code.typeMismatch
         }
 

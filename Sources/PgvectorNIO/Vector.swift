@@ -27,7 +27,7 @@ extension Vector: @retroactive PostgresDecodable {
         format: PostgresFormat,
         context: PostgresDecodingContext<JSONDecoder>
     ) throws {
-        guard type.isUserDefined else {
+        guard type == Vector.psqlType, type.isUserDefined else {
             throw PostgresDecodingError.Code.typeMismatch
         }
 
