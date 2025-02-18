@@ -1,12 +1,10 @@
 // swift-tools-version: 5.7
 
+import Foundation
 import PackageDescription
 
-let package = Package(
+var package = Package(
     name: "Pgvector",
-    platforms: [
-        .macOS(.v13),
-    ],
     products: [
         .library(
             name: "Pgvector",
@@ -49,3 +47,7 @@ let package = Package(
             ]),
     ]
 )
+
+if ProcessInfo.processInfo.environment["TEST"] != nil {
+    package.platforms = [.macOS(.v13)]
+}

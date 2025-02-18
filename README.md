@@ -132,7 +132,7 @@ To get started with development:
 git clone https://github.com/pgvector/pgvector-swift.git
 cd pgvector-swift
 createdb pgvector_swift_test
-swift test
+TEST=1 swift test
 ```
 
 To run an example:

@@ -15,4 +15,4 @@ jobs:
           cd pgvector
           make
           sudo make install
-      - run: swift test
+      - run: TEST=1 swift test
