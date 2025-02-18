@@ -19,8 +19,8 @@ let package = Package(
             targets: ["PgvectorNIO"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/codewinsdotcom/PostgresClientKit", from: "1.5.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.24.0"),
+        .package(url: "https://github.com/codewinsdotcom/PostgresClientKit", from: "1.0.0"),
+        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.0.0"),
     ],
     targets: [
         .target(
