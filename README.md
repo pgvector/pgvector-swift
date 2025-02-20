@@ -117,6 +117,53 @@ Use `vector_ip_ops` for inner product and `vector_cosine_ops` for cosine distanc
 
 See a [full example](Tests/PgvectorTests/PostgresClientKitTests.swift)
 
+## Reference
+
+### Vectors
+
+Create a vector from an array
+
+```swift
+let vec = Vector([1, 2, 3])
+```
+
+### Half Vectors
+
+Create a half vector from an array
+
+```swift
+let vec = HalfVector([1, 2, 3])
+```
+
+### Sparse Vectors
+
+Create a sparse vector from an array
+
+```swift
+let vec = SparseVector([1, 0, 2, 0, 3, 0])
+```
+
+Or a dictionary of non-zero elements
+
+```swift
+let vec = SparseVector([0: 1, 2: 2, 4: 3], dim: 6)!
+```
+
+Note: Indices start at 0
+
+Get the number of dimensions
+
+```swift
+let dim = vec.dim
+```
+
+Get the indices and values of non-zero elements
+
+```swift
+let indices = vec.indices
+let values = vec.values
+```
+
 ## Contributing
 
 Everyone is encouraged to help improve this project. Here are a few ways you can help:
