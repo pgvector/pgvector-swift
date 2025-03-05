@@ -1,5 +1,7 @@
 import Foundation
 import Ollama
+import Pgvector
+import PgvectorNIO
 import PostgresNIO
 
 let config = PostgresClient.Configuration(
@@ -13,7 +15,7 @@ let config = PostgresClient.Configuration(
 
 let client = PostgresClient(configuration: config)
 
-func embed(input: String, taskType: String) async throws -> [Double] {
+func embed(input: String, taskType: String) async throws -> [Float] {
     // nomic-embed-text uses a task prefix
     // https://huggingface.co/nomic-ai/nomic-embed-text-v1.5
     let input = taskType + ": " + input
@@ -22,7 +24,7 @@ func embed(input: String, taskType: String) async throws -> [Double] {
         model: "nomic-embed-text",
         input: input
     )
-    return response.embeddings.rawValue[0]
+    return response.embeddings.rawValue[0].map { Float($0) }
 }
 
 try await withThrowingTaskGroup(of: Void.self) { taskGroup in
@@ -31,6 +33,8 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
     }
 
     try await client.query("CREATE EXTENSION IF NOT EXISTS vector")
+    try await PgvectorNIO.registerTypes(client)
+
     try await client.query("DROP TABLE IF EXISTS documents")
     try await client.query("CREATE TABLE documents (id serial PRIMARY KEY, content text, embedding vector(768))")
 
@@ -41,13 +45,13 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
     ]
 
     for content in input {
-        let embedding = try await embed(input: content, taskType: "search_document")
+        let embedding = Vector(try await embed(input: content, taskType: "search_document"))
         try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding))")
     }
 
     let query = "forest"
-    let embedding = try await embed(input: query, taskType: "search_query")
-    let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <=> \(embedding)::vector LIMIT 5")
+    let embedding = Vector(try await embed(input: query, taskType: "search_query"))
+    let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <=> \(embedding) LIMIT 5")
     for try await row in rows {
         print(row)
     }
