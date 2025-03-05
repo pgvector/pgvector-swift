@@ -15,4 +15,5 @@ jobs:
           cd pgvector
           make
           sudo make install
+      - run: psql -d pgvector_swift_test -c "CREATE EXTENSION vector"
       - run: swift test
