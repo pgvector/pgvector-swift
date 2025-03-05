@@ -20,7 +20,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/codewinsdotcom/PostgresClientKit", from: "1.0.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.0.0"),
+        .package(url: "https://github.com/vapor/postgres-nio", from: "1.0.0"),
     ],
     targets: [
         .target(

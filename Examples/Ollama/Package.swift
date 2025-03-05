@@ -8,8 +8,8 @@ let package = Package(
         .macOS(.v13),
     ],
     dependencies: [
-        .package(url: "https://github.com/mattt/ollama-swift.git", from: "1.2.0"),
-        .package(url: "https://github.com/vapor/postgres-nio.git", from: "1.24.0"),
+        .package(url: "https://github.com/mattt/ollama-swift", from: "1.2.0"),
+        .package(url: "https://github.com/vapor/postgres-nio", from: "1.24.0"),
     ],
     targets: [
         .executableTarget(
