@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Pgvector",
     platforms: [
-        .macOS(.v13),
+        .macOS(.v13)
     ],
     products: [
         .library(
@@ -30,13 +30,13 @@ let package = Package(
             name: "PgvectorClientKit",
             dependencies: [
                 "Pgvector",
-                "PostgresClientKit"
+                "PostgresClientKit",
             ]),
         .target(
             name: "PgvectorNIO",
             dependencies: [
                 "Pgvector",
-                .product(name: "PostgresNIO", package: "postgres-nio")
+                .product(name: "PostgresNIO", package: "postgres-nio"),
             ]),
         .testTarget(
             name: "PgvectorTests",
@@ -45,7 +45,7 @@ let package = Package(
                 "PgvectorClientKit",
                 "PgvectorNIO",
                 "PostgresClientKit",
-                .product(name: "PostgresNIO", package: "postgres-nio")
+                .product(name: "PostgresNIO", package: "postgres-nio"),
             ]),
     ]
 )

@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Example",
     platforms: [
-        .macOS(.v13),
+        .macOS(.v13)
     ],
     dependencies: [
         .package(url: "https://github.com/mattt/ollama-swift", from: "1.2.0"),
@@ -19,7 +19,7 @@ let package = Package(
                 .product(name: "Ollama", package: "ollama-swift"),
                 .product(name: "PostgresNIO", package: "postgres-nio"),
                 .product(name: "Pgvector", package: "pgvector-swift"),
-                .product(name: "PgvectorNIO", package: "pgvector-swift")
-            ]),
+                .product(name: "PgvectorNIO", package: "pgvector-swift"),
+            ])
     ]
 )

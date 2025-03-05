@@ -7,7 +7,7 @@ public struct SparseVector: Equatable {
         var indices: [Int] = []
         var values: [Float] = []
         for (i, v) in value.enumerated() {
-            if (v != 0) {
+            if v != 0 {
                 indices.append(i)
                 values.append(v)
             }
@@ -53,7 +53,7 @@ public struct SparseVector: Equatable {
         var indices: [Int] = []
         var values: [Float] = []
 
-        if (elements.count > 2) {
+        if elements.count > 2 {
             let start = elements.index(elements.startIndex, offsetBy: 1)
             let end = elements.index(elements.endIndex, offsetBy: -1)
             for e in elements[start..<end].split(separator: ",") {

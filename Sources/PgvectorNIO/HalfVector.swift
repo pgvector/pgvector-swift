@@ -36,7 +36,7 @@ extension HalfVector: @retroactive PostgresDecodable {
         }
 
         guard format == .binary else {
-            throw PostgresDecodingError.Code.failure;
+            throw PostgresDecodingError.Code.failure
         }
 
         guard buffer.readableBytes >= 2, let dim = buffer.readInteger(as: Int16.self) else {

@@ -40,7 +40,7 @@ extension SparseVector: @retroactive PostgresDecodable {
         }
 
         guard format == .binary else {
-            throw PostgresDecodingError.Code.failure;
+            throw PostgresDecodingError.Code.failure
         }
 
         guard buffer.readableBytes >= 4, let dim = buffer.readInteger(as: Int32.self) else {

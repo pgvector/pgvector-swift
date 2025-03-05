@@ -7,15 +7,15 @@ extension Vector: @retroactive PostgresValueConvertible {
     }
 }
 
-public extension PostgresValue {
-    func vector() throws -> Vector {
+extension PostgresValue {
+    public func vector() throws -> Vector {
         if isNull {
             throw PostgresError.valueIsNil
         }
         return try optionalVector()!
     }
 
-    func optionalVector() throws -> Vector? {
+    public func optionalVector() throws -> Vector? {
         guard let rawValue = rawValue else { return nil }
 
         guard let vector = Vector(rawValue) else {

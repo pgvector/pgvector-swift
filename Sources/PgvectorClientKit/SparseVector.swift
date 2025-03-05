@@ -7,15 +7,15 @@ extension SparseVector: @retroactive PostgresValueConvertible {
     }
 }
 
-public extension PostgresValue {
-    func sparseVector() throws -> SparseVector {
+extension PostgresValue {
+    public func sparseVector() throws -> SparseVector {
         if isNull {
             throw PostgresError.valueIsNil
         }
         return try optionalSparseVector()!
     }
 
-    func optionalSparseVector() throws -> SparseVector? {
+    public func optionalSparseVector() throws -> SparseVector? {
         guard let rawValue = rawValue else { return nil }
 
         guard let vector = SparseVector(rawValue) else {
