@@ -16,6 +16,7 @@ Follow the instructions for your database library:
 Or check out an example:
 
 - [Embeddings](Examples/Ollama/Sources/main.swift) with Ollama
+- [Sparse search](Examples/Sparse/Sources/main.swift) with Text Embeddings Inference
 
 ## PostgresNIO
 
