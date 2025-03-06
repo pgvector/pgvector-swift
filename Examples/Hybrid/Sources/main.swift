@@ -68,8 +68,7 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
     let query = "growling bear"
     let queryEmbedding = Vector((try await embed(input: [query], taskType: "search_query"))[0])
     let k = 60
-    let rows = try await client.query(
-        """
+    let sql: PostgresQuery = """
         WITH semantic_search AS (
             SELECT id, RANK () OVER (ORDER BY embedding <=> \(queryEmbedding)) AS rank
             FROM documents
@@ -92,7 +91,7 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
         ORDER BY score DESC
         LIMIT 5
         """
-    )
+    let rows = try await client.query(sql)
     for try await row in rows {
         print(row)
     }
