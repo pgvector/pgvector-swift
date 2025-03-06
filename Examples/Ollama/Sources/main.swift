@@ -1,5 +1,4 @@
 import Foundation
-import Ollama
 import Pgvector
 import PgvectorNIO
 import PostgresNIO
@@ -15,16 +14,33 @@ let config = PostgresClient.Configuration(
 
 let client = PostgresClient(configuration: config)
 
-func embed(input: String, taskType: String) async throws -> [Float] {
+struct ApiData: Encodable {
+    var model: String
+    var input: [String]
+}
+
+struct ApiResponse: Decodable {
+    var embeddings: [[Float]]
+}
+
+func embed(input: [String], taskType: String) async throws -> [[Float]] {
     // nomic-embed-text uses a task prefix
     // https://huggingface.co/nomic-ai/nomic-embed-text-v1.5
-    let input = taskType + ": " + input
+    let input = input.map { taskType + ": " + $0 }
 
-    let response = try await Client.default.embed(
+    let url = URL(string: "http://localhost:11434/api/embed")!
+    let data = ApiData(
         model: "nomic-embed-text",
         input: input
     )
-    return response.embeddings.rawValue[0].map { Float($0) }
+
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.httpBody = try JSONEncoder().encode(data)
+    let (body, _) = try await URLSession.shared.data(for: request)
+    let response = try JSONDecoder().decode(ApiResponse.self, from: body)
+
+    return response.embeddings
 }
 
 try await withThrowingTaskGroup(of: Void.self) { taskGroup in
@@ -43,14 +59,14 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
         "The cat is purring",
         "The bear is growling",
     ]
-
-    for content in input {
-        let embedding = Vector(try await embed(input: content, taskType: "search_document"))
+    let embeddings = try await embed(input: input, taskType: "search_document")
+    for (content, embedding) in zip(input, embeddings) {
+        let embedding = Vector(embedding)
         try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding))")
     }
 
     let query = "forest"
-    let embedding = Vector(try await embed(input: query, taskType: "search_query"))
+    let embedding = Vector((try await embed(input: [query], taskType: "search_query"))[0])
     let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <=> \(embedding) LIMIT 5")
     for try await row in rows {
         print(row)
