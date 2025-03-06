@@ -17,7 +17,7 @@ Or check out an example:
 
 - [Embeddings](Examples/OpenAI/Sources/main.swift) with OpenAI
 - [Binary embeddings](Examples/Cohere/Sources/main.swift) with Cohere
-- [Embeddings](Examples/Ollama/Sources/main.swift) with Ollama
+- [Hybrid search](Examples/Hybrid/Sources/main.swift) with Ollama
 - [Sparse search](Examples/Sparse/Sources/main.swift) with Text Embeddings Inference
 
 ## PostgresNIO

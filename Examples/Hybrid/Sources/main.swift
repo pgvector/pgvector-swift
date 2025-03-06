@@ -65,9 +65,34 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
         try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding))")
     }
 
-    let query = "forest"
-    let embedding = Vector((try await embed(input: [query], taskType: "search_query"))[0])
-    let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <=> \(embedding) LIMIT 5")
+    let query = "growling bear"
+    let queryEmbedding = Vector((try await embed(input: [query], taskType: "search_query"))[0])
+    let k = 60
+    let rows = try await client.query(
+        """
+        WITH semantic_search AS (
+            SELECT id, RANK () OVER (ORDER BY embedding <=> \(queryEmbedding)) AS rank
+            FROM documents
+            ORDER BY embedding <=> \(queryEmbedding)
+            LIMIT 20
+        ),
+        keyword_search AS (
+            SELECT id, RANK () OVER (ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC)
+            FROM documents, plainto_tsquery('english', \(query)) query
+            WHERE to_tsvector('english', content) @@ query
+            ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC
+            LIMIT 20
+        )
+        SELECT
+            COALESCE(semantic_search.id, keyword_search.id) AS id,
+            COALESCE(1.0 / (\(k) + semantic_search.rank), 0.0) +
+            COALESCE(1.0 / (\(k) + keyword_search.rank), 0.0) AS score
+        FROM semantic_search
+        FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+        ORDER BY score DESC
+        LIMIT 5
+        """
+    )
     for try await row in rows {
         print(row)
     }
