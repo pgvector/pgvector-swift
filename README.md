@@ -15,6 +15,7 @@ Follow the instructions for your database library:
 
 Or check out an example:
 
+- [Binary embeddings](Examples/Cohere/Sources/main.swift) with Cohere
 - [Embeddings](Examples/Ollama/Sources/main.swift) with Ollama
 - [Sparse search](Examples/Sparse/Sources/main.swift) with Text Embeddings Inference
 
