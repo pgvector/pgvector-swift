@@ -33,10 +33,10 @@ struct EmbeddingsObject: Decodable {
 }
 
 func embed(texts: [String], inputType: String, apiKey: String) async throws -> [String] {
-    let url = URL(string: "https://api.cohere.com/v1/embed")!
+    let url = URL(string: "https://api.cohere.com/v2/embed")!
     let data = ApiData(
         texts: texts,
-        model: "embed-english-v3.0",
+        model: "embed-v4.0",
         inputType: inputType,
         embeddingTypes: ["ubinary"]
     )
@@ -65,7 +65,7 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
 
     try await client.query("CREATE EXTENSION IF NOT EXISTS vector")
     try await client.query("DROP TABLE IF EXISTS documents")
-    try await client.query("CREATE TABLE documents (id serial PRIMARY KEY, content text, embedding bit(1024))")
+    try await client.query("CREATE TABLE documents (id serial PRIMARY KEY, content text, embedding bit(1536))")
 
     let input = [
         "The dog is barking",
@@ -74,12 +74,12 @@ try await withThrowingTaskGroup(of: Void.self) { taskGroup in
     ]
     let embeddings = try await embed(texts: input, inputType: "search_document", apiKey: apiKey)
     for (content, embedding) in zip(input, embeddings) {
-        try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding)::bit(1024))")
+        try await client.query("INSERT INTO documents (content, embedding) VALUES (\(content), \(embedding)::bit(1536))")
     }
 
     let query = "forest"
     let queryEmbedding = (try await embed(texts: [query], inputType: "search_query", apiKey: apiKey))[0]
-    let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <~> \(queryEmbedding)::bit(1024) LIMIT 5")
+    let rows = try await client.query("SELECT content FROM documents ORDER BY embedding <~> \(queryEmbedding)::bit(1536) LIMIT 5")
     for try await row in rows {
         print(row)
     }
